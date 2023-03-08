@@ -3,6 +3,9 @@ import numpy as np
 import math
 import os
 from angle_toolbox import theta_calc, phi_calc
+import sys
+
+sys.setrecursionlimit(10000)
 
 os.system('clear')
 
@@ -55,6 +58,7 @@ while 1:
 x_classic = x.copy()
 y_classic = y.copy()
 z_classic = z.copy()
+
 
 def classic_follow(x, y, z, current_pos):
     if len(x) == 1:
@@ -121,20 +125,20 @@ def bezier_main(xBezier, yBezier, zBezier, actuations):
     previous_vector = [0, 0, 0]
     curvature_limit = math.pi/6
     phi = 0
-
+    actuations = actuations
     xBezier, yBezier, zBezier = first_bezier(x, y, z)
 
-    while 1:
+    def recursive_bezier(path_length, k, xBezier, yBezier, zBezier, previous_vector, current_pos, phi, actuations):
         if k == len(xBezier):
             print("End of curve reached")
             print(f"Phi array is {phi_array}")
             print(f"Theta array is {theta_array}")
-            break
+            quit()
         elif actuations > max_actuations:
             print("Snake fully extended")
             print(f"Phi array is {phi_array}")
             print(f"Theta array is {theta_array}")
-            break
+            quit()
         path_length = math.sqrt((xBezier[k]-current_pos[0])**2 + (
             yBezier[k]-current_pos[1])**2 + (zBezier[k] - current_pos[2])**2)
 
@@ -176,12 +180,17 @@ def bezier_main(xBezier, yBezier, zBezier, actuations):
                             current_pos[2], c='blue')
                 ax1.plot(xBezier, yBezier, zBezier, c='red')
                 plt.show()
-            path_length = 0
+                path_length = 0
+            recursive_bezier(path_length, k, xBezier, yBezier, zBezier,
+                             previous_vector, current_pos, phi, actuations)
 
         else:
             k += 1
+            recursive_bezier(path_length, k, xBezier, yBezier, zBezier,
+                             previous_vector, current_pos, phi, actuations)
 
-    return theta_array, phi_array
+    recursive_bezier(path_length, k, xBezier, yBezier, zBezier,
+                     previous_vector, current_pos, phi, actuations)
 
 
 def first_bezier(x, y, z):

@@ -4,6 +4,11 @@ import math
 import os
 from angle_toolbox import theta_calc, phi_calc
 import sys
+import time
+import matplotlib.animation as animation
+import matplotlib
+from IPython.display import HTML
+
 
 sys.setrecursionlimit(10000)
 
@@ -13,6 +18,22 @@ os.system('clear')
 x = [0]
 y = [0]
 z = [0]
+xBezier = []
+yBezier = []
+zBezier = []
+
+# Trying classical following to start, drawing straight lines between points
+x_classic = x.copy()
+y_classic = y.copy()
+z_classic = z.copy()
+
+x_animation_array = []
+y_animation_array = []
+z_animation_array = []
+xBezier_array = []
+yBezier_array = []
+zBezier_array = []
+current_pos_array = []
 
 # Initialize phi and theta array output
 phi_array = []
@@ -28,7 +49,6 @@ curvature_limit = math.pi/6
 
 # Initialize current position tracker
 current_pos = [0, 0, 0]
-
 
 # Input points, handle errors as needed
 while 1:
@@ -54,13 +74,15 @@ while 1:
             "There was an error in understanding your response. Continuing onwards.")
         break
 
-# Try classical following to start, drawing straight lines between points
-x_classic = x.copy()
-y_classic = y.copy()
-z_classic = z.copy()
 
-
-def classic_follow(x, y, z, current_pos):
+def classic_follow(x, y, z, current_pos, x_animation_array, y_animation_array, z_animation_array, xBezier_array, yBezier_array, zBezier_array, current_pos_array):
+    xBezier_array.append(x)
+    yBezier_array.append(y)
+    zBezier_array.append(z)
+    current_pos_array.append(current_pos)
+    x_animation_array.append(x)
+    y_animation_array.append(y)
+    z_animation_array.append(z)
     if len(x) == 1:
         print(f"Path following complete, current position is {current_pos}")
         print(f"Final phi array is {phi_array}")
@@ -80,7 +102,8 @@ def classic_follow(x, y, z, current_pos):
         (vector_difference[0], vector_difference[1], vector_difference[2]), (-1, 0, 0))
 
     if phi > curvature_limit:
-        bezier_main(0, 0, 0, actuations)
+        bezier_main(0, 0, 0, actuations, x_animation_array, y_animation_array,
+                    z_animation_array, xBezier_array, yBezier_array, zBezier_array, current_pos_array)
     else:
         # Adjusting for range of theta_calc being [0, pi]
         if vector_difference[0] > 0 and vector_difference[1] < 0:
@@ -108,17 +131,11 @@ def classic_follow(x, y, z, current_pos):
         z[0] = current_pos[2]
         z.pop(1)
 
-        fig1 = plt.figure(figsize=(8, 8))
-        ax1 = fig1.add_subplot(111, projection='3d')
-        ax1.plot(x_classic, y_classic, z_classic, c='red')
-        ax1.scatter(current_pos[0], current_pos[1],
-                    current_pos[2], c='blue')
-        plt.show()
-
-        classic_follow(x, y, z, current_pos)
+        classic_follow(x, y, z, current_pos, x_animation_array, y_animation_array,
+                       z_animation_array, xBezier_array, yBezier_array, zBezier_array, current_pos_array)
 
 
-def bezier_main(xBezier, yBezier, zBezier, actuations):
+def bezier_main(xBezier, yBezier, zBezier, actuations, x_animation_array, y_animation_array, z_animation_array, xBezier_array, yBezier_array, zBezier_array, current_pos_array):
     current_pos = [x[0], y[0], z[0]]
     path_length = 0
     k = 0
@@ -128,17 +145,17 @@ def bezier_main(xBezier, yBezier, zBezier, actuations):
     actuations = actuations
     xBezier, yBezier, zBezier = first_bezier(x, y, z)
 
-    def recursive_bezier(path_length, k, xBezier, yBezier, zBezier, previous_vector, current_pos, phi, actuations):
+    def recursive_bezier(path_length, k, xBezier, yBezier, zBezier, previous_vector, current_pos, phi, actuations, x_animation_array, y_animation_array, z_animation_array, xBezier_array, yBezier_array, zBezier_array, current_pos_array):
         if k == len(xBezier):
             print("End of curve reached")
             print(f"Phi array is {phi_array}")
             print(f"Theta array is {theta_array}")
-            quit()
+            return 0
         elif actuations > max_actuations:
             print("Snake fully extended")
             print(f"Phi array is {phi_array}")
             print(f"Theta array is {theta_array}")
-            quit()
+            return 0
         path_length = math.sqrt((xBezier[k]-current_pos[0])**2 + (
             yBezier[k]-current_pos[1])**2 + (zBezier[k] - current_pos[2])**2)
 
@@ -172,25 +189,24 @@ def bezier_main(xBezier, yBezier, zBezier, actuations):
                 actuations += 1
                 phi_array.append(phi)
                 theta_array.append(theta)
-
-                fig1 = plt.figure(figsize=(8, 8))
-                ax1 = fig1.add_subplot(111, projection='3d')
-                ax1.scatter(x, y, z, c='black')
-                ax1.scatter(current_pos[0], current_pos[1],
-                            current_pos[2], c='blue')
-                ax1.plot(xBezier, yBezier, zBezier, c='red')
-                plt.show()
                 path_length = 0
+            xBezier_array.append(xBezier)
+            yBezier_array.append(yBezier)
+            zBezier_array.append(zBezier)
+            current_pos_array.append(current_pos)
+            x_animation_array.append(x)
+            y_animation_array.append(y)
+            z_animation_array.append(z)
             recursive_bezier(path_length, k, xBezier, yBezier, zBezier,
-                             previous_vector, current_pos, phi, actuations)
+                             previous_vector, current_pos, phi, actuations, x_animation_array, y_animation_array, z_animation_array, xBezier_array, yBezier_array, zBezier_array, current_pos_array)
 
         else:
             k += 1
             recursive_bezier(path_length, k, xBezier, yBezier, zBezier,
-                             previous_vector, current_pos, phi, actuations)
+                             previous_vector, current_pos, phi, actuations, x_animation_array, y_animation_array, z_animation_array, xBezier_array, yBezier_array, zBezier_array, current_pos_array)
 
     recursive_bezier(path_length, k, xBezier, yBezier, zBezier,
-                     previous_vector, current_pos, phi, actuations)
+                     previous_vector, current_pos, phi, actuations, x_animation_array, y_animation_array, z_animation_array, xBezier_array, yBezier_array, zBezier_array, current_pos_array)
 
 
 def first_bezier(x, y, z):
@@ -294,4 +310,25 @@ def new_bezier(x, y, z, xPreviousBezier, yPreviousBezier, zPreviousBezier, reque
     return xBezier[0], yBezier[0], zBezier[0]
 
 
-classic_follow(x, y, z, current_pos)
+classic_follow(x, y, z, current_pos, x_animation_array, y_animation_array,
+               z_animation_array, xBezier_array, yBezier_array, zBezier_array, current_pos_array)
+
+fig = plt.figure(figsize=(8, 8))
+ax1 = fig.add_subplot(111, projection='3d')
+
+
+def animate(i):
+    ax1.cla()
+    ax1.scatter(
+        x_animation_array[i], y_animation_array[i], z_animation_array[i], c='black')
+    ax1.scatter(current_pos_array[i][0], current_pos_array[i][1],
+                current_pos_array[i][2], c='blue')
+    ax1.plot(
+        xBezier_array[i], yBezier_array[i], zBezier_array[i], c='red')
+    fig.canvas.draw_idle()
+
+
+n_frames = len(xBezier_array)
+ani = matplotlib.animation.FuncAnimation(fig, animate,
+                                         frames=range(0, n_frames), interval=300, repeat=False)
+plt.show()

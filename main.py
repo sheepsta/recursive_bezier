@@ -80,9 +80,9 @@ def classic_follow(x, y, z, current_pos, x_animation_array, y_animation_array, z
     yBezier_array.append(y)
     zBezier_array.append(z)
     current_pos_array.append(current_pos)
-    x_animation_array.append(x)
-    y_animation_array.append(y)
-    z_animation_array.append(z)
+    x_animation_array.append(x.copy())
+    y_animation_array.append(y.copy())
+    z_animation_array.append(z.copy())
     if len(x) == 1:
         print(f"Path following complete, current position is {current_pos}")
         print(f"Final phi array is {phi_array}")
@@ -90,6 +90,8 @@ def classic_follow(x, y, z, current_pos, x_animation_array, y_animation_array, z
         quit()
     elif actuations > max_actuations:
         print(f"Snake fully extended, current position is {current_pos}")
+        print(f"Final phi array is {phi_array}")
+        print(f"Final theta array is {theta_array}")
         quit()
 
     vector_difference = [x[1]-x[0], y[1]-y[0], z[1]-z[0]]
@@ -194,9 +196,9 @@ def bezier_main(xBezier, yBezier, zBezier, actuations, x_animation_array, y_anim
             yBezier_array.append(yBezier)
             zBezier_array.append(zBezier)
             current_pos_array.append(current_pos)
-            x_animation_array.append(x)
-            y_animation_array.append(y)
-            z_animation_array.append(z)
+            x_animation_array.append(x.copy())
+            y_animation_array.append(y.copy())
+            z_animation_array.append(z.copy())
             recursive_bezier(path_length, k, xBezier, yBezier, zBezier,
                              previous_vector, current_pos, phi, actuations, x_animation_array, y_animation_array, z_animation_array, xBezier_array, yBezier_array, zBezier_array, current_pos_array)
 
@@ -330,5 +332,8 @@ def animate(i):
 
 n_frames = len(xBezier_array)
 ani = matplotlib.animation.FuncAnimation(fig, animate,
-                                         frames=range(0, n_frames), interval=300, repeat=False)
+                                         frames=range(0, n_frames), interval=300, repeat=True)
 plt.show()
+
+for i in x_animation_array:
+    print(i)

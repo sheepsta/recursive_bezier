@@ -322,7 +322,7 @@ def animate(i):
     ax1.scatter(
         x_animation_array[i], y_animation_array[i], z_animation_array[i], c='black')
     ax1.scatter(current_pos_array[i][0], current_pos_array[i][1],
-                current_pos_array[i][2], c='blue')
+                current_pos_array[i][2], c='blue', s=50)
     ax1.plot(
         xBezier_array[i], yBezier_array[i], zBezier_array[i], c='red')
     fig.canvas.draw_idle()

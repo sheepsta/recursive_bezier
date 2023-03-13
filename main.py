@@ -87,12 +87,12 @@ def classic_follow(x, y, z, current_pos, x_animation_array, y_animation_array, z
         print(f"Path following complete, current position is {current_pos}")
         print(f"Final phi array is {phi_array}")
         print(f"Final theta array is {theta_array}")
-        quit()
+        return 0
     elif actuations > max_actuations:
         print(f"Snake fully extended, current position is {current_pos}")
         print(f"Final phi array is {phi_array}")
         print(f"Final theta array is {theta_array}")
-        quit()
+        return 0
 
     vector_difference = [x[1]-x[0], y[1]-y[0], z[1]-z[0]]
     mag_vector_difference = math.sqrt(
@@ -318,13 +318,19 @@ classic_follow(x, y, z, current_pos, x_animation_array, y_animation_array,
 fig = plt.figure(figsize=(8, 8))
 ax1 = fig.add_subplot(111, projection='3d')
 
+ax1.plot(
+    x_classic, y_classic, z_classic, c='green')
+ax1.set_xlabel("x axis")
+ax1.set_ylabel("y axis")
+ax1.set_zlabel("z axis")
+
 
 def animate(i):
     ax1.cla()
     ax1.scatter(
         x_animation_array[i], y_animation_array[i], z_animation_array[i], c='black')
-    ax1.scatter(current_pos_array[i][0], current_pos_array[i][1],
-                current_pos_array[i][2], c='blue', s=50)
+    ax1.plot(current_pos_array[i][0], current_pos_array[i][1],
+             current_pos_array[i][2], c='blue')
     ax1.plot(
         xBezier_array[i], yBezier_array[i], zBezier_array[i], c='red')
     fig.canvas.draw_idle()
@@ -334,6 +340,3 @@ n_frames = len(xBezier_array)
 ani = matplotlib.animation.FuncAnimation(fig, animate,
                                          frames=range(0, n_frames), interval=300, repeat=True)
 plt.show()
-
-for i in x_animation_array:
-    print(i)

@@ -75,7 +75,7 @@ while 1:
         break
 
 
-def classic_follow(x, y, z, current_pos, x_animation_array, y_animation_array, z_animation_array, xBezier_array, yBezier_array, zBezier_array, current_pos_array):
+def classic_follow(x, y, z, current_pos, x_animation_array, y_animation_array, z_animation_array, xBezier_array, yBezier_array, zBezier_array, current_pos_array, theta_array, phi_array):
     xBezier_array.append(x)
     yBezier_array.append(y)
     zBezier_array.append(z)
@@ -85,13 +85,54 @@ def classic_follow(x, y, z, current_pos, x_animation_array, y_animation_array, z
     z_animation_array.append(z.copy())
     if len(x) == 1:
         print(f"Path following complete, current position is {current_pos}")
-        print(f"Final phi array is {phi_array}")
-        print(f"Final theta array is {theta_array}")
+        fig = plt.figure(figsize=(8, 8))
+        ax1 = fig.add_subplot(111, projection='3d')
+        ax1.plot(
+            x_classic, y_classic, z_classic, c='green')
+        ax1.set_xlabel("x axis")
+        ax1.set_ylabel("y axis")
+        ax1.set_zlabel("z axis")
+
+        def animate(i):
+            ax1.cla()
+            ax1.scatter(
+                x_animation_array[i], y_animation_array[i], z_animation_array[i], c='black')
+            ax1.scatter(current_pos_array[i][0], current_pos_array[i][1],
+                        current_pos_array[i][2], c='blue')
+            ax1.plot(
+                xBezier_array[i], yBezier_array[i], zBezier_array[i], c='red')
+            fig.canvas.draw_idle()
+
+        n_frames = len(xBezier_array)
+        ani = matplotlib.animation.FuncAnimation(fig, animate,
+                                                 frames=range(0, n_frames), interval=300, repeat=True)
+        plt.show()
         return 0
     elif actuations > max_actuations:
         print(f"Snake fully extended, current position is {current_pos}")
-        print(f"Final phi array is {phi_array}")
-        print(f"Final theta array is {theta_array}")
+        fig = plt.figure(figsize=(8, 8))
+        ax1 = fig.add_subplot(111, projection='3d')
+
+        ax1.plot(
+            x_classic, y_classic, z_classic, c='green')
+        ax1.set_xlabel("x axis")
+        ax1.set_ylabel("y axis")
+        ax1.set_zlabel("z axis")
+
+        def animate(i):
+            ax1.cla()
+            ax1.scatter(
+                x_animation_array[i], y_animation_array[i], z_animation_array[i], c='black')
+            ax1.scatter(current_pos_array[i][0], current_pos_array[i][1],
+                        current_pos_array[i][2], c='blue')
+            ax1.plot(
+                xBezier_array[i], yBezier_array[i], zBezier_array[i], c='red')
+            fig.canvas.draw_idle()
+
+        n_frames = len(xBezier_array)
+        ani = matplotlib.animation.FuncAnimation(fig, animate,
+                                                 frames=range(0, n_frames), interval=300, repeat=True)
+        plt.show()
         return 0
 
     vector_difference = [x[1]-x[0], y[1]-y[0], z[1]-z[0]]
@@ -134,7 +175,7 @@ def classic_follow(x, y, z, current_pos, x_animation_array, y_animation_array, z
         z.pop(1)
 
         classic_follow(x, y, z, current_pos, x_animation_array, y_animation_array,
-                       z_animation_array, xBezier_array, yBezier_array, zBezier_array, current_pos_array)
+                       z_animation_array, xBezier_array, yBezier_array, zBezier_array, current_pos_array, theta_array, phi_array)
 
 
 def bezier_main(xBezier, yBezier, zBezier, actuations, x_animation_array, y_animation_array, z_animation_array, xBezier_array, yBezier_array, zBezier_array, current_pos_array):
@@ -150,13 +191,55 @@ def bezier_main(xBezier, yBezier, zBezier, actuations, x_animation_array, y_anim
     def recursive_bezier(path_length, k, xBezier, yBezier, zBezier, previous_vector, current_pos, phi, actuations, x_animation_array, y_animation_array, z_animation_array, xBezier_array, yBezier_array, zBezier_array, current_pos_array):
         if k == len(xBezier):
             print("End of curve reached")
-            print(f"Phi array is {phi_array}")
-            print(f"Theta array is {theta_array}")
+            fig = plt.figure(figsize=(8, 8))
+            ax1 = fig.add_subplot(111, projection='3d')
+
+            ax1.plot(
+                x_classic, y_classic, z_classic, c='green')
+            ax1.set_xlabel("x axis")
+            ax1.set_ylabel("y axis")
+            ax1.set_zlabel("z axis")
+
+            def animate(i):
+                ax1.cla()
+                ax1.scatter(
+                    x_animation_array[i], y_animation_array[i], z_animation_array[i], c='black')
+                ax1.scatter(current_pos_array[i][0], current_pos_array[i][1],
+                            current_pos_array[i][2], c='blue')
+                ax1.plot(
+                    xBezier_array[i], yBezier_array[i], zBezier_array[i], c='red')
+                fig.canvas.draw_idle()
+
+            n_frames = len(xBezier_array)
+            ani = matplotlib.animation.FuncAnimation(fig, animate,
+                                                     frames=range(0, n_frames), interval=300, repeat=True)
+            plt.show()
             return 0
         elif actuations > max_actuations:
             print("Snake fully extended")
-            print(f"Phi array is {phi_array}")
-            print(f"Theta array is {theta_array}")
+            fig = plt.figure(figsize=(8, 8))
+            ax1 = fig.add_subplot(111, projection='3d')
+
+            ax1.plot(
+                x_classic, y_classic, z_classic, c='green')
+            ax1.set_xlabel("x axis")
+            ax1.set_ylabel("y axis")
+            ax1.set_zlabel("z axis")
+
+            def animate(i):
+                ax1.cla()
+                ax1.scatter(
+                    x_animation_array[i], y_animation_array[i], z_animation_array[i], c='black')
+                ax1.scatter(current_pos_array[i][0], current_pos_array[i][1],
+                            current_pos_array[i][2], c='blue')
+                ax1.plot(
+                    xBezier_array[i], yBezier_array[i], zBezier_array[i], c='red')
+                fig.canvas.draw_idle()
+
+            n_frames = len(xBezier_array)
+            ani = matplotlib.animation.FuncAnimation(fig, animate,
+                                                     frames=range(0, n_frames), interval=300, repeat=True)
+            plt.show()
             return 0
         path_length = math.sqrt((xBezier[k]-current_pos[0])**2 + (
             yBezier[k]-current_pos[1])**2 + (zBezier[k] - current_pos[2])**2)
@@ -164,7 +247,6 @@ def bezier_main(xBezier, yBezier, zBezier, actuations, x_animation_array, y_anim
         if path_length > link_length:
             vector = [xBezier[k] - current_pos[0], yBezier[k] -
                       current_pos[1], zBezier[k] - current_pos[2]]
-            print("advanced!")
             mag_vector = math.sqrt(vector[0]**2 + vector[1]**2 + vector[2]**2)
             un_vector = [vector[0]/mag_vector,
                          vector[1]/mag_vector, vector[2]/mag_vector]
@@ -180,7 +262,6 @@ def bezier_main(xBezier, yBezier, zBezier, actuations, x_animation_array, y_anim
             phi_prev = phi
             phi = phi_calc(vector, previous_vector)
             if abs(phi_prev-phi) > curvature_limit:
-                print(f"The calculated phi is {phi}")
                 request_control_point_add = (current_pos[0] + link_length*math.cos(curvature_limit),
                                              current_pos[1] + link_length*math.sin(curvature_limit)*math.cos(theta), current_pos[2] + link_length*math.sin(curvature_limit)*math.sin(theta))
                 xBezier, yBezier, zBezier = new_bezier(
@@ -313,30 +394,6 @@ def new_bezier(x, y, z, xPreviousBezier, yPreviousBezier, zPreviousBezier, reque
 
 
 classic_follow(x, y, z, current_pos, x_animation_array, y_animation_array,
-               z_animation_array, xBezier_array, yBezier_array, zBezier_array, current_pos_array)
-
-fig = plt.figure(figsize=(8, 8))
-ax1 = fig.add_subplot(111, projection='3d')
-
-ax1.plot(
-    x_classic, y_classic, z_classic, c='green')
-ax1.set_xlabel("x axis")
-ax1.set_ylabel("y axis")
-ax1.set_zlabel("z axis")
-
-
-def animate(i):
-    ax1.cla()
-    ax1.scatter(
-        x_animation_array[i], y_animation_array[i], z_animation_array[i], c='black')
-    ax1.plot(current_pos_array[i][0], current_pos_array[i][1],
-             current_pos_array[i][2], c='blue')
-    ax1.plot(
-        xBezier_array[i], yBezier_array[i], zBezier_array[i], c='red')
-    fig.canvas.draw_idle()
-
-
-n_frames = len(xBezier_array)
-ani = matplotlib.animation.FuncAnimation(fig, animate,
-                                         frames=range(0, n_frames), interval=300, repeat=True)
-plt.show()
+               z_animation_array, xBezier_array, yBezier_array, zBezier_array, current_pos_array, theta_array, phi_array)
+print(phi_array)
+print(theta_array)

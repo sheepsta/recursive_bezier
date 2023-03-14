@@ -97,8 +97,15 @@ def classic_follow(x, y, z, current_pos, x_animation_array, y_animation_array, z
             ax1.cla()
             ax1.scatter(
                 x_animation_array[i], y_animation_array[i], z_animation_array[i], c='black')
-            ax1.scatter(current_pos_array[i][0], current_pos_array[i][1],
-                        current_pos_array[i][2], c='blue')
+            current_pos_x = []
+            current_pos_y = []
+            current_pos_z = []
+            for j in range(0, i):
+                current_pos_x.append(current_pos_array[j][0])
+                current_pos_y.append(current_pos_array[j][1])
+                current_pos_z.append(current_pos_array[j][2])
+            ax1.plot(
+                current_pos_x, current_pos_y, current_pos_z, c='blue', linewidth=5)
             ax1.plot(
                 xBezier_array[i], yBezier_array[i], zBezier_array[i], c='red')
             fig.canvas.draw_idle()
@@ -123,8 +130,15 @@ def classic_follow(x, y, z, current_pos, x_animation_array, y_animation_array, z
             ax1.cla()
             ax1.scatter(
                 x_animation_array[i], y_animation_array[i], z_animation_array[i], c='black')
-            ax1.scatter(current_pos_array[i][0], current_pos_array[i][1],
-                        current_pos_array[i][2], c='blue')
+            current_pos_x = []
+            current_pos_y = []
+            current_pos_z = []
+            for j in range(0, i):
+                current_pos_x.append(current_pos_array[j][0])
+                current_pos_y.append(current_pos_array[j][1])
+                current_pos_z.append(current_pos_array[j][2])
+            ax1.plot(
+                current_pos_x, current_pos_y, current_pos_z, c='blue', linewidth=5)
             ax1.plot(
                 xBezier_array[i], yBezier_array[i], zBezier_array[i], c='red')
             fig.canvas.draw_idle()
@@ -204,8 +218,15 @@ def bezier_main(xBezier, yBezier, zBezier, actuations, x_animation_array, y_anim
                 ax1.cla()
                 ax1.scatter(
                     x_animation_array[i], y_animation_array[i], z_animation_array[i], c='black')
-                ax1.scatter(current_pos_array[i][0], current_pos_array[i][1],
-                            current_pos_array[i][2], c='blue')
+                current_pos_x = []
+                current_pos_y = []
+                current_pos_z = []
+                for j in range(0, i):
+                    current_pos_x.append(current_pos_array[j][0])
+                    current_pos_y.append(current_pos_array[j][1])
+                    current_pos_z.append(current_pos_array[j][2])
+                ax1.plot(
+                    current_pos_x, current_pos_y, current_pos_z, c='blue', linewidth=5)
                 ax1.plot(
                     xBezier_array[i], yBezier_array[i], zBezier_array[i], c='red')
                 fig.canvas.draw_idle()
@@ -230,8 +251,15 @@ def bezier_main(xBezier, yBezier, zBezier, actuations, x_animation_array, y_anim
                 ax1.cla()
                 ax1.scatter(
                     x_animation_array[i], y_animation_array[i], z_animation_array[i], c='black')
-                ax1.scatter(current_pos_array[i][0], current_pos_array[i][1],
-                            current_pos_array[i][2], c='blue')
+                current_pos_x = []
+                current_pos_y = []
+                current_pos_z = []
+                for j in range(0, i):
+                    current_pos_x.append(current_pos_array[j][0])
+                    current_pos_y.append(current_pos_array[j][1])
+                    current_pos_z.append(current_pos_array[j][2])
+                ax1.plot(
+                    current_pos_x, current_pos_y, current_pos_z, c='blue', linewidth=5)
                 ax1.plot(
                     xBezier_array[i], yBezier_array[i], zBezier_array[i], c='red')
                 fig.canvas.draw_idle()

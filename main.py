@@ -289,7 +289,7 @@ def bezier_main(xBezier, yBezier, zBezier, actuations, x_animation_array, y_anim
                 theta = theta + math.pi
             phi_prev = phi
             phi = phi_calc(vector, previous_vector)
-            if abs(phi_prev-phi) > curvature_limit:
+            if abs(phi) > curvature_limit:
                 request_control_point_add = (current_pos[0] + link_length*math.cos(curvature_limit),
                                              current_pos[1] + link_length*math.sin(curvature_limit)*math.cos(theta), current_pos[2] + link_length*math.sin(curvature_limit)*math.sin(theta))
                 xBezier, yBezier, zBezier = new_bezier(

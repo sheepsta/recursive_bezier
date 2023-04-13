@@ -26,9 +26,7 @@ def theta_calc(vector, previous_vector):
 def phi_calc(vector, previous_vector):
     phi = angle_between((0, 1, 0), (vector[0] - previous_vector[0],
                                     vector[1] - previous_vector[1], vector[2] - previous_vector[2]))
-    if phi == math.pi:
-        return 0
     if math.isnan(phi):
         return 0
     else:
-        return phi
+        return abs(math.pi*.5-phi)

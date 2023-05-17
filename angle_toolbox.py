@@ -13,14 +13,15 @@ def angle_between(v1, v2):
 
 
 def theta_calc(vector, previous_vector):
-    try:
-        theta = angle_between(
+    theta = angle_between(
             (-1, 0, 0), (vector[0] - previous_vector[0], 0, vector[2] - previous_vector[2]))
-        if math.isnan(theta):
-            return 0
-        return theta
-    except:
+    if math.isnan(theta):
         return 0
+    else:
+        return theta
+
+
+
 
 
 def phi_calc(vector, previous_vector):

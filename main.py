@@ -312,7 +312,6 @@ def bezier_main(xBezier, yBezier, zBezier, actuations, x_animation_array, y_anim
             z_animation_array.append(z.copy())
             recursive_bezier(path_length, k, xBezier, yBezier, zBezier,
                              previous_vector, current_pos, phi, actuations, x_animation_array, y_animation_array, z_animation_array, xBezier_array, yBezier_array, zBezier_array, current_pos_array)
-            time.sleep(.5)
         else:
             k += 1
             recursive_bezier(path_length, k, xBezier, yBezier, zBezier,
@@ -425,4 +424,3 @@ def new_bezier(x, y, z, xPreviousBezier, yPreviousBezier, zPreviousBezier, reque
 
 classic_follow(x, y, z, current_pos, x_animation_array, y_animation_array,
                z_animation_array, xBezier_array, yBezier_array, zBezier_array, current_pos_array, theta_array, phi_array)
-
